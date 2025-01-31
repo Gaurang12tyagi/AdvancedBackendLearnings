@@ -1,0 +1,16 @@
+{
+  "name": "advancedbackend",
+  "version": "1.0.0",
+  "description": "Advanced Backend",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "Javascript",
+    "Node.js",
+    "MongoDB"
+  ],
+  "author": "Gaurang",
+  "license": "ISC"
+}
