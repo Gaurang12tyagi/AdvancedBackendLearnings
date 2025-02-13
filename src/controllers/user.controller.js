@@ -167,7 +167,7 @@ export const logoutUser = asyncHandler(async (req, res) => {
 
 
 export const refreshAccessToken = asyncHandler(async (req, res) => {
-    const incomingRefreshToken = req.cookies?.refreshToken || req.body;
+    const incomingRefreshToken = req.cookies?.refreshToken || req.body.refreshToken;
     if (!incomingRefreshToken) {
         throw new ApiError(401, "Unauthorized request");
     }
@@ -193,4 +193,44 @@ export const refreshAccessToken = asyncHandler(async (req, res) => {
         throw new ApiError(401, error?.message || "invalid refrsh token")
 
     }
+})
+
+export const changeCurrentPassword = asyncHandler(async (req, res) => {
+    const { oldPassword, newPassword, confirmPassword } = req.body;
+    if (!(newPassword == confirmPassword)) {
+        throw new ApiError(401, "New password do not matches with confirm password")
+    }
+    const user = await User.findById(req.user?._id);
+    const isPasswordCorrect = await user.isPasswordCorrect(oldPassword);
+    if (!isPasswordCorrect) {
+        throw new ApiError(401, "Invalid Old Password");
+
+    }
+    user.password = newPassword;
+    await user.save({ validateBeforeSave: false });
+    return res.status(200).json(new ApiResponse(200, {}, "Password changed successfully"))
+})
+
+export const getCurrentUser = asyncHandler(async (req, res) => {
+    return req.status(200).json(200, req.user);
+})
+
+const updateAccountDetails = asyncHandler(async (req, res) => {
+    const { fullName, email } = req.body;
+
+    if (!fullName || !email) {
+        throw new ApiError(401, "Mandatory fields are required.")
+    }
+    const user = await User.findByIdAndUpdate(req?.user?._id, {
+        $set: { fullName: fullName, email: email }
+    }, {
+        new: true
+    }).select({ password: 0 })
+
+    return res.status(200).json(new ApiResponse(201, { user }, "User edited successfully"));
+
+
+});
+const updateUserAvatar=asyncHandler(async(req,res)=>{
+    req.files
 })
