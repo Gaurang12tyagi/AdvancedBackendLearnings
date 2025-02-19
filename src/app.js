@@ -2,6 +2,7 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import userRouter from './routes/user.route.js';
+import Redis from 'ioredis';
 
 
 const app = express();

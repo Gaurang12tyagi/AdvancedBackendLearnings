@@ -3,6 +3,7 @@ import { app } from "./app.js";
 import dotenv from "dotenv"; 
 import path from "path";
 import { fileURLToPath } from "url";
+import redisClient from "./config/redisClient.js";
 
 // Resolve the directory path correctly
 const __filename = fileURLToPath(import.meta.url);
